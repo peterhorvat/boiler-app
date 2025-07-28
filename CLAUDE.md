@@ -68,16 +68,19 @@ docker-compose exec backend celery -A core flower
 ### Backend Architecture (Django)
 - **Custom User Model**: Uses email as username field (`apps.users.User`)
 - **JWT Authentication**: SimpleJWT with access/refresh token rotation
-- **App Structure**: Modular apps in `backend/apps/` (users, authentication)
+- **App Structure**: Modular apps in `backend/apps/` (users, authentication, websockets)
 - **Database**: PostgreSQL with connection pooling
 - **Caching**: Redis for session storage and Celery broker
 - **Task Queue**: Celery for background processing
+- **WebSockets**: Django Channels with Redis channel layer for real-time communication
+- **ASGI**: Daphne server for handling both HTTP and WebSocket connections
 - **API**: RESTful API with DRF pagination (20 items per page)
 
 ### Frontend Architecture (Nuxt 3)
 - **SPA Mode**: Server-side rendering disabled (`ssr: false`)
 - **State Management**: Pinia stores for authentication and app state
 - **HTTP Client**: Axios with automatic JWT token handling and refresh
+- **WebSocket Client**: Composables for real-time communication (`useWebSocket`, `useNotifications`, `useChat`)
 - **Authentication**: Cookie-based token storage with automatic refresh
 - **Styling**: Tailwind CSS with custom components
 - **Route Protection**: Middleware for authenticated/guest routes
@@ -119,6 +122,11 @@ Key variables defined in `.env` file:
 - `/api/auth/logout/` - User logout
 - `/api/auth/change-password/` - Password change
 - `/api/users/me/` - Current user profile
+
+### WebSocket Endpoints
+- `ws/notifications/{user_id}/` - Real-time notifications for specific user
+- `ws/chat/{room_name}/` - Real-time chat for specific room
+- Authentication via JWT token in query string: `?token=ACCESS_TOKEN`
 
 ### Deployment
 - Production uses `docker-compose.prod.yml` with Nginx reverse proxy
