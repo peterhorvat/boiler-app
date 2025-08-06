@@ -3,7 +3,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from jwt.exceptions import DecodeError
 
 User = get_user_model()
 
@@ -94,7 +95,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             user = await database_sync_to_async(User.objects.get)(id=user_id)
             return user
             
-        except (InvalidToken, User.DoesNotExist):
+        except (InvalidToken, TokenError, DecodeError, User.DoesNotExist, Exception):
             return None
 
 
@@ -223,5 +224,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user = await database_sync_to_async(User.objects.get)(id=user_id)
             return user
             
-        except (InvalidToken, User.DoesNotExist):
+        except (InvalidToken, TokenError, DecodeError, User.DoesNotExist, Exception):
             return None

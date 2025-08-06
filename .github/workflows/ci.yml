@@ -89,7 +89,7 @@ jobs:
         python manage.py makemigrations --check
         python manage.py migrate
         
-    - name: Run tests
+    - name: Run tests with coverage
       env:
         SECRET_KEY: test-secret-key
         DEBUG: True
@@ -102,7 +102,18 @@ jobs:
       run: |
         cd backend
         python manage.py collectstatic --noinput
-        python manage.py test
+        coverage run --source='.' manage.py test
+        coverage report --show-missing
+        coverage xml
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./backend/coverage.xml
+        directory: ./backend/
+        flags: backend
+        name: backend-coverage
+        fail_ci_if_error: false
         
     - name: Cleanup test database
       if: always()

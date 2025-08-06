@@ -13,3 +13,11 @@ dj-database-url==2.1.0
 channels==4.0.0
 channels-redis==4.2.0
 daphne==4.0.0
+
+# Testing dependencies
+coverage==7.4.0
+pytest>=7.0.0,<8.0.0
+pytest-django==4.8.0
+pytest-cov==4.1.0
+pytest-asyncio==0.23.4
+factory-boy==3.3.0
