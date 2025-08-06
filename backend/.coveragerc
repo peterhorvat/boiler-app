@@ -1,0 +1,30 @@
+[run]
+source = .
+omit = 
+    */venv/*
+    */env/*
+    manage.py
+    */settings/*
+    */migrations/*
+    */tests/*
+    */test_*
+    */conftest.py
+    venv/*
+    env/*
+    .venv/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    class .*\bProtocol\):
+    @(abc\.)?abstractmethod
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml
